@@ -7,3 +7,4 @@ geekshop/db.sqlite3
 /manage.py
 /media/
 /geekshop/static/
+/geekshop/.env
