@@ -47,7 +47,14 @@ INSTALLED_APPS = [
     'mainapp',
     'basketapp',
     'adminapp',
+
+    'social_django',
 ]
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'social_core.backends.vk.VKOAuth2',
+)
 
 AUTH_USER_MODEL = 'authapp.ShopUser'
 
@@ -163,4 +170,8 @@ EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = '2525'
 
 # EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+
+SOCIAL_AUTH_VK_OAUTH2_KEY = env('SOCIAL_AUTH_VK_OAUTH2_KEY')
+SOCIAL_AUTH_VK_OAUTH2_SECRET = env('SOCIAL_AUTH_VK_OAUTH2_SECRET')
+
 
