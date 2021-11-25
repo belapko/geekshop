@@ -5,11 +5,16 @@
     <form class="form-horizontal" action="{% url 'auth:register' %}" method="post">
         {% csrf_token %}
         {{ register_form.as_p }}
-      <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+        <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
     </form>
     <button class="btn btn-round form-control">
         <a href="{% url 'auth:login' %}" class="">
             Войти
         </a>
     </button>
+    {% if messages %}
+        {% for msg in messages %}
+            <p>{{ msg }}</p>
+        {% endfor %}
+    {% endif %}
 {% endblock %}

@@ -1,0 +1,10 @@
+env/
+~/__pycache__
+*.pyc
+.idea
+geekshop/db.sqlite3
+/db.sqlite3
+/manage.py
+/media/
+/geekshop/static/
+/geekshop/.env
