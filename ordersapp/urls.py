@@ -1,15 +1,15 @@
 from django.urls import path
-from ordersapp.views import OrderList, order_forming_complete, OrderCreate, OrderRead, OrderUpdate, OrderDelete
+import ordersapp.views as ordersapp
 
 
 app_name = 'ordersapp'
 
 urlpatterns = [
-    path('', OrderList.as_view(), name='orders_list'),
-    path('forming/complete/<int:pk>/', order_forming_complete, name='order_forming_complete'),
-    path('create/', OrderCreate.as_view(), name='order_create'),
-    path('read/<int:pk>/', OrderRead.as_view(), name='order_read'),
-    path('update/<int:pk>/', OrderUpdate.as_view(), name='order_update'),
-    path('delete/<int:pk>/', OrderDelete.as_view(), name='order_delete'),
+    path('', ordersapp.OrderList.as_view(), name='orders_list'),
+    path('forming/complete/<int:pk>/', ordersapp.order_forming_complete, name='order_forming_complete'),
+    path('create/', ordersapp.OrderCreate.as_view(), name='order_create'),
+    path('read/<int:pk>/', ordersapp.OrderRead.as_view(), name='order_read'),
+    path('update/<int:pk>/', ordersapp.OrderUpdate.as_view(), name='order_update'),
+    path('delete/<int:pk>/', ordersapp.OrderDelete.as_view(), name='order_delete'),
 ]
 

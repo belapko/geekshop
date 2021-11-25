@@ -1,7 +1,4 @@
 from django.db.models.signals import pre_save, pre_delete
-from django.dispatch import receiver
-from django.shortcuts import render
-
 from django.shortcuts import get_object_or_404, HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.db import transaction
@@ -14,6 +11,7 @@ from django.views.generic.detail import DetailView
 from basketapp.models import Basket
 from ordersapp.models import Order, OrderItem
 from ordersapp.forms import OrderItemForm
+from django.dispatch import receiver
 
 
 class OrderList(ListView):
@@ -26,7 +24,7 @@ class OrderList(ListView):
 class OrderCreate(CreateView):
     model = Order
     fields = []
-    success_url = reverse_lazy('ordersapp:orders_list')
+    success_url = reverse_lazy('orders:orders_list')
 
     def get_context_data(self, **kwargs):
         context = super(OrderCreate, self).get_context_data(**kwargs)
@@ -42,7 +40,7 @@ class OrderCreate(CreateView):
                 for num, form in enumerate(formset.forms):
                     form.initial['product'] = basket_items[num].product
                     form.initial['quantity'] = basket_items[num].quantity
-                    # form.initial['price'] = basket_items[num].price
+                    form.initial['price'] = basket_items[num].product.price
                 basket_items.delete()
             else:
                 formset = OrderFormSet()
@@ -61,7 +59,6 @@ class OrderCreate(CreateView):
                 orderitems.instance = self.object
                 orderitems.save()
 
-        # удаляем пустой заказ
         if self.object.get_total_cost() == 0:
             self.object.delete()
 
@@ -71,14 +68,14 @@ class OrderCreate(CreateView):
 class OrderUpdate(UpdateView):
     model = Order
     fields = []
-    success_url = reverse_lazy('ordersapp:orders_list')
+    success_url = reverse_lazy('orders:orders_list')
 
     def get_context_data(self, **kwargs):
         context = super(OrderUpdate, self).get_context_data(**kwargs)
         OrderFormSet = inlineformset_factory(Order, OrderItem, form=OrderItemForm, extra=1)
 
         if self.request.POST:
-            formset = OrderFormSet(self.request.POST, instanse=self.object)
+            formset = OrderFormSet(self.request.POST, instance=self.object)
         else:
             formset = OrderFormSet(instance=self.object)
             for form in formset.forms:
@@ -99,7 +96,6 @@ class OrderUpdate(UpdateView):
                 orderitems.instance = self.object
                 orderitems.save()
 
-        # удаляем пустой заказ
         if self.object.get_total_cost() == 0:
             self.object.delete()
 
@@ -114,10 +110,6 @@ class OrderDelete(DeleteView):
 class OrderRead(DetailView):
     model = Order
     extra_context = {'title': 'заказ/просмотр'}
-
-    def get_context_data(self, **kwargs):
-        context = super(OrderRead, self).get_context_data(**kwargs)
-        return context
 
 
 def order_forming_complete(request, pk):
